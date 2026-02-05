@@ -36,7 +36,7 @@ fi
 
 # Prepare the environment file for the dev user
 # We copy it to the dev user's home temporarily to avoid permission issues
-TMP_ENV_PATH="/home/$DEV_USER/.project_env_tmp"
+TMP_ENV_PATH="/home/$DEV_USER/$REPO_NAME/.env"
 cp .env.repository "$TMP_ENV_PATH"
 chown "$DEV_USER" "$TMP_ENV_PATH"
 chmod 600 "$TMP_ENV_PATH"
