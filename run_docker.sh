@@ -28,6 +28,19 @@ if ! id "$DEV_USER" &>/dev/null; then
     exit 1
 fi
 
+# Check for .env.repository file
+if [ ! -f .env.repository ]; then
+    echo "Error: .env.repository file not found. Please create it with your project's environment variables."
+    exit 1
+fi
+
+# Prepare the environment file for the dev user
+# We copy it to the dev user's home temporarily to avoid permission issues
+TMP_ENV_PATH="/home/$DEV_USER/.project_env_tmp"
+cp .env.repository "$TMP_ENV_PATH"
+chown "$DEV_USER" "$TMP_ENV_PATH"
+chmod 600 "$TMP_ENV_PATH"
+
 # Define the deployment commands to run as the dev user
 # We use a heredoc passed to bash -c to execute multiple commands safely as the target user
 sudo -u "$DEV_USER" bash <<EOF
@@ -50,6 +63,14 @@ sudo -u "$DEV_USER" bash <<EOF
         # To be safe and support token rotation, we can update the remote origin:
         git remote set-url origin "$GITHUB_REPO_URL"
         git pull origin main || git pull origin master || git pull
+    fi
+
+    echo "Setting up project environment file..."
+    if [ -f "$HOME/.project_env_tmp" ]; then
+        mv "$HOME/.project_env_tmp" .env
+        echo ".env file updated from .env.repository"
+    else
+        echo "Warning: Temporary env file not found. Skipping .env update."
     fi
 
     echo "Running Docker Compose..."

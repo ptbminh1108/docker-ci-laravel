@@ -32,6 +32,13 @@ This guide explains how to use the `set_up_docker.sh` script to set up Docker, c
     - `REPO_NAME`: Directoy name to clone the project into.
     - `DOCKER_COMPOSE_FILE`: Filename of your compose file (e.g., `docker-compose.yml`).
 
+3.  **Project Environment File**:
+    Create a file named `.env.repository` in the same directory. This file should contain the production/staging environment variables for your application (e.g., Laravel's `.env`).
+    ```bash
+    nano .env.repository
+    # Paste your project env variables here
+    ```
+
 ### 2. Make the Scripts Executable
 
 Give the scripts execution permissions:
@@ -53,8 +60,9 @@ Run the setup script to install Docker and create the user. You might be prompte
 Use this script effectively to deploy or update your application. It will:
 
 1.  Switch to the `DEV_USER` context.
-2.  Clone or Pull the repository defined in `.env`.
-3.  Build and start the containers defined in `DOCKER_COMPOSE_FILE`.
+2.  Copy `.env.repository` to the project's `.env` file.
+3.  Clone or Pull the repository defined in `.env`.
+4.  Build and start the containers defined in `DOCKER_COMPOSE_FILE`.
 
 ```bash
 ./run_docker.sh
