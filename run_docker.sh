@@ -89,8 +89,22 @@ sudo -u "$DEV_USER" bash <<EOF
     \$DOCKER_COMPOSE_CMD -f "$DOCKER_COMPOSE_FILE" up -d --build
 
     echo "Running post-deployment commands..."
-    \$DOCKER_COMPOSE_CMD -f "$DOCKER_COMPOSE_FILE" exec app php artisan key:generate
-    \$DOCKER_COMPOSE_CMD -f "$DOCKER_COMPOSE_FILE" exec app php artisan migrate --seed
+    
+    echo "[LOG] Generating application key..."
+    if \$DOCKER_COMPOSE_CMD -f "$DOCKER_COMPOSE_FILE" exec -T app php artisan key:generate; then
+        echo "[SUCCESS] Application key generated."
+    else
+        echo "[ERROR] Failed to generate application key."
+    fi
+
+    echo "[LOG] Running migrations and seeds..."
+    if \$DOCKER_COMPOSE_CMD -f "$DOCKER_COMPOSE_FILE" exec -T app php artisan migrate --seed; then
+        echo "[SUCCESS] Migrations and seeding completed."
+    else
+        echo "[ERROR] Failed to run migrations/seeds."
+        echo "[DEBUG] Fetching last 50 lines of app container logs..."
+        \$DOCKER_COMPOSE_CMD -f "$DOCKER_COMPOSE_FILE" logs --tail=50 app
+    fi
 
     echo "Deployment completed successfully."
 EOF
