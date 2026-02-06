@@ -75,15 +75,22 @@ sudo -u "$DEV_USER" bash <<EOF
     fi
 
     echo "Running Docker Compose..."
-    # Check if docker compose (plugin) or docker-compose (standalone) is available
+    # Determine which docker compose command to use
     if docker compose version &>/dev/null; then
-        docker compose -f "$DOCKER_COMPOSE_FILE" up -d --build
+        DOCKER_COMPOSE_CMD="docker compose"
     elif command -v docker-compose &>/dev/null; then
-        docker-compose -f "$DOCKER_COMPOSE_FILE" up -d --build
+        DOCKER_COMPOSE_CMD="docker-compose"
     else
         echo "Error: Neither 'docker compose' nor 'docker-compose' found."
         exit 1
     fi
+
+    echo "Running Docker Compose..."
+    $DOCKER_COMPOSE_CMD -f "$DOCKER_COMPOSE_FILE" up -d --build
+
+    echo "Running post-deployment commands..."
+    $DOCKER_COMPOSE_CMD -f "$DOCKER_COMPOSE_FILE" exec app php artisan key:generate
+    $DOCKER_COMPOSE_CMD -f "$DOCKER_COMPOSE_FILE" exec app php artisan migrate --seed
 
     echo "Deployment completed successfully."
 EOF
