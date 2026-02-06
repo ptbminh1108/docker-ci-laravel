@@ -10,6 +10,8 @@ else
     echo "Error: .env file not found."
     exit 1
 fi
+# save current directory
+CURRENT_DIR=$(pwd)
 
 # Validate required variables
 REQUIRED_VARS=("DEV_USER" "GITHUB_REPO_URL" "GITHUB_RUNNER_TOKEN")
@@ -96,6 +98,7 @@ echo "Pre-populating .env in runner workspace..."
 WORK_DIR="$RUNNER_DIR/_work/$REPO_NAME/$REPO_NAME"
 
 if [ -f .env.repository ]; then
+		cd "$CURRENT_DIR"
     sudo -u "$DEV_USER" mkdir -p "$WORK_DIR"
     sudo cp .env.repository "$WORK_DIR/.env"
     sudo chown "$DEV_USER":"$DEV_USER" "$WORK_DIR/.env"
