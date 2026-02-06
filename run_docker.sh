@@ -69,10 +69,16 @@ sudo -u "$DEV_USER" bash <<EOF
     TMP_ENV_FILE="/home/$DEV_USER/.project_env_tmp"
     if [ -f "\$TMP_ENV_FILE" ]; then
         mv "\$TMP_ENV_FILE" .env
+        # Ensure .env is writable by the container user (e.g. www-data)
+        chmod 666 .env
         echo ".env file updated from .env.repository"
     else
         echo "Warning: Temporary env file not found at \$TMP_ENV_FILE. Skipping .env update."
     fi
+    
+    # Ensure storage and cache directories are writable
+    echo "Configuring directory permissions..."
+    chmod -R 777 storage bootstrap/cache 2>/dev/null || true
 
     echo "Running Docker Compose..."
     # Determine which docker compose command to use
