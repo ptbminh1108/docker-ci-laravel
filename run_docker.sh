@@ -91,7 +91,7 @@ sudo -u "$DEV_USER" bash <<EOF
     echo "Running post-deployment commands..."
     
     echo "[LOG] Generating application key..."
-    if \$DOCKER_COMPOSE_CMD -f "$DOCKER_COMPOSE_FILE" exec -T app php artisan key:generate; then
+    if \$DOCKER_COMPOSE_CMD -f "$DOCKER_COMPOSE_FILE" exec -T app php artisan key:generate --force; then
         echo "[SUCCESS] Application key generated."
     else
         echo "[ERROR] Failed to generate application key."
