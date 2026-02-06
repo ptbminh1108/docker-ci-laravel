@@ -86,11 +86,11 @@ sudo -u "$DEV_USER" bash <<EOF
     fi
 
     echo "Running Docker Compose..."
-    $DOCKER_COMPOSE_CMD -f "$DOCKER_COMPOSE_FILE" up -d --build
+    \$DOCKER_COMPOSE_CMD -f "$DOCKER_COMPOSE_FILE" up -d --build
 
     echo "Running post-deployment commands..."
-    $DOCKER_COMPOSE_CMD -f "$DOCKER_COMPOSE_FILE" exec app php artisan key:generate
-    $DOCKER_COMPOSE_CMD -f "$DOCKER_COMPOSE_FILE" exec app php artisan migrate --seed
+    \$DOCKER_COMPOSE_CMD -f "$DOCKER_COMPOSE_FILE" exec app php artisan key:generate
+    \$DOCKER_COMPOSE_CMD -f "$DOCKER_COMPOSE_FILE" exec app php artisan migrate --seed
 
     echo "Deployment completed successfully."
 EOF
