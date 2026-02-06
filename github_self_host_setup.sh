@@ -78,6 +78,10 @@ else
     # This ensures it runs in background and persists after reboot/terminal close
     echo "Installing runner as a systemd service..."
     cd "$RUNNER_DIR"
+    # Ensure any previous instance is cleared
+    sudo ./svc.sh stop || true
+    sudo ./svc.sh uninstall || true
+    
     sudo ./svc.sh install "$DEV_USER"
     sudo ./svc.sh start
     
