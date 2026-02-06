@@ -66,11 +66,12 @@ sudo -u "$DEV_USER" bash <<EOF
     fi
 
     echo "Setting up project environment file..."
-    if [ -f "$HOME/$DEV_USER/.project_env_tmp" ]; then
-        mv "$HOME/$DEV_USER/.project_env_tmp" .env
+    TMP_ENV_FILE="/home/$DEV_USER/.project_env_tmp"
+    if [ -f "$TMP_ENV_FILE" ]; then
+        mv "$TMP_ENV_FILE" .env
         echo ".env file updated from .env.repository"
     else
-        echo "Warning: Temporary env file not found. Skipping .env update."
+        echo "Warning: Temporary env file not found at $TMP_ENV_FILE. Skipping .env update."
     fi
 
     echo "Running Docker Compose..."
