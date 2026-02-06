@@ -61,12 +61,35 @@ Use this script effectively to deploy or update your application. It will:
 
 1.  Switch to the `DEV_USER` context.
 2.  Copy `.env.repository` to the project's `.env` file.
+    - It checks the current directory first.
+    - **Fallback**: It checks `/home/<DEV_USER>/secrets/.env.repository` (useful for CI/CD runners).
 3.  Clone or Pull the repository defined in `.env`.
 4.  Build and start the containers defined in `DOCKER_COMPOSE_FILE`.
 
 ```bash
 ./run_docker.sh
 ```
+
+## GitHub Self-Hosted Runner Setup
+
+If you want to automate deployments using GitHub Actions on this VPS:
+
+1.  **Get Runner Token**: Go to your GitHub Repo -> Settings -> Actions -> Runners -> New self-hosted runner. Copy the token.
+2.  **Update .env**: Add the token to your `.env` file:
+    ```bash
+    GITHUB_RUNNER_TOKEN=your_token_here
+    ```
+3.  **Run Setup Script**:
+    ```bash
+    chmod +x github_self_host_setup.sh
+    ./github_self_host_setup.sh
+    ```
+
+**What this does:**
+
+- Installs the runner in `/home/<DEV_USER>/actions-runner`.
+- Configures it as a system service (runs in background, auto-starts).
+- **Secrets Persistence**: Creates `/home/<DEV_USER>/secrets` and copies your `.env.repository` there. This ensures that when the runner cleans the workspace, your environment variables are safe and available for `run_docker.sh`.
 
 ### 5. Verification
 

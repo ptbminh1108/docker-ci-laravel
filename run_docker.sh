@@ -29,15 +29,21 @@ if ! id "$DEV_USER" &>/dev/null; then
 fi
 
 # Check for .env.repository file
-if [ ! -f .env.repository ]; then
-    echo "Error: .env.repository file not found. Please create it with your project's environment variables."
+if [ -f .env.repository ]; then
+    echo "Found .env.repository in current directory."
+    SOURCE_ENV=".env.repository"
+elif [ -f "/home/$DEV_USER/secrets/.env.repository" ]; then
+    echo "Found .env.repository in /home/$DEV_USER/secrets/"
+    SOURCE_ENV="/home/$DEV_USER/secrets/.env.repository"
+else
+    echo "Error: .env.repository file not found in current directory or /home/$DEV_USER/secrets/."
     exit 1
 fi
 
 # Prepare the environment file for the dev user
 # We copy it to the dev user's home temporarily to avoid permission issues
 TMP_ENV_PATH="/home/$DEV_USER/.project_env_tmp"
-cp .env.repository "$TMP_ENV_PATH"
+cp "$SOURCE_ENV" "$TMP_ENV_PATH"
 chown "$DEV_USER" "$TMP_ENV_PATH"
 chmod 600 "$TMP_ENV_PATH"
 
