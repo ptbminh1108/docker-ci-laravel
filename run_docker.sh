@@ -66,8 +66,8 @@ sudo -u "$DEV_USER" bash <<EOF
     fi
 
     echo "Setting up project environment file..."
-    if [ -f "$HOME/.project_env_tmp" ]; then
-        mv "$HOME/.project_env_tmp" .env
+    if [ -f "$HOME/$DEV_USER/.project_env_tmp" ]; then
+        mv "$HOME/$DEV_USER/.project_env_tmp" .env
         echo ".env file updated from .env.repository"
     else
         echo "Warning: Temporary env file not found. Skipping .env update."
