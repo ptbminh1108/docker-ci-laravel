@@ -87,3 +87,17 @@ fi
 echo "Status of runner service:"
 cd "$RUNNER_DIR"
 sudo ./svc.sh status
+
+# 6. Pre-seed workspace .env (Requested Update)
+echo "Pre-populating .env in runner workspace..."
+WORK_DIR="$RUNNER_DIR/_work/$REPO_NAME/$REPO_NAME"
+
+if [ -f .env.repository ]; then
+    sudo -u "$DEV_USER" mkdir -p "$WORK_DIR"
+    sudo cp .env.repository "$WORK_DIR/.env"
+    sudo chown "$DEV_USER":"$DEV_USER" "$WORK_DIR/.env"
+    sudo chmod 600 "$WORK_DIR/.env"
+    echo "Copied .env.repository to $WORK_DIR/.env"
+else
+    echo "Warning: .env.repository not found. Skipping workspace .env pre-seed."
+fi

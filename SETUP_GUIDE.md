@@ -44,7 +44,7 @@ This guide explains how to use the `set_up_docker.sh` script to set up Docker, c
 Give the scripts execution permissions:
 
 ```bash
-chmod +x set_up_docker.sh run_docker.sh
+chmod +x set_up_docker.sh run_docker.sh github_self_host_setup.sh
 ```
 
 ### 3. Run the Setup Script (One-time)
