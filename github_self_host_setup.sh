@@ -95,7 +95,7 @@ fi
 # 6. Pre-seed workspace .env (Requested Update)
 
 echo "Pre-populating .env in runner workspace..."
-WORK_DIR="$RUNNER_DIR/_work/$REPO_NAME/$REPO_NAME"
+WORK_DIR="$RUNNER_DIR/_work/$REPO_NAME"
 		cd "$CURRENT_DIR"
 
 if [ -f .env.repository ]; then
