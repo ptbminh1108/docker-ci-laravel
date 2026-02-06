@@ -97,12 +97,14 @@ sudo -u "$DEV_USER" bash <<EOF
 
     echo "Running post-deployment commands..."
     
-    echo "[LOG] Generating application key..."
-    \$DOCKER_COMPOSE_CMD -f "$DOCKER_COMPOSE_FILE" exec -T app php artisan key:generate --force || echo "[WARNING] Application key generation failed, continuing..."
-
     echo "[LOG] Running migrations and seeds..."
     # Run directly to show output
     \$DOCKER_COMPOSE_CMD -f "$DOCKER_COMPOSE_FILE" exec -T app php artisan migrate --seed --force
+
+
+    echo "[LOG] Generating application key..."
+    \$DOCKER_COMPOSE_CMD -f "$DOCKER_COMPOSE_FILE" exec -T app php artisan key:generate --force || echo "[WARNING] Application key generation failed, continuing..."
+
 
     echo "Deployment completed successfully."
 EOF
