@@ -44,8 +44,9 @@ chmod 600 "$TMP_ENV_PATH"
 # Define the deployment commands to run as the dev user
 # We use a heredoc passed to bash -c to execute multiple commands safely as the target user
 sudo -u "$DEV_USER" bash <<EOF
-    # Ensure strict mode within the sub-shell
+    # Ensure strict mode and verbose logging for debugging
     set -e
+    set -x
 
     # Navigate to home directory (or intended workspace)
     cd /home/"$DEV_USER"
@@ -97,11 +98,7 @@ sudo -u "$DEV_USER" bash <<EOF
     echo "Running post-deployment commands..."
     
     echo "[LOG] Generating application key..."
-    if \$DOCKER_COMPOSE_CMD -f "$DOCKER_COMPOSE_FILE" exec -T app php artisan key:generate --force; then
-        echo "[SUCCESS] Application key generated."
-    else
-        echo "[ERROR] Failed to generate application key."
-    fi
+    \$DOCKER_COMPOSE_CMD -f "$DOCKER_COMPOSE_FILE" exec -T app php artisan key:generate --force
 
     echo "[LOG] Running migrations and seeds..."
     # Run directly to show output
