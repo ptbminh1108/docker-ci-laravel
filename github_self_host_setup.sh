@@ -96,9 +96,9 @@ fi
 
 echo "Pre-populating .env in runner workspace..."
 WORK_DIR="$RUNNER_DIR/_work/$REPO_NAME/$REPO_NAME"
+		cd "$CURRENT_DIR"
 
 if [ -f .env.repository ]; then
-		cd "$CURRENT_DIR"
     sudo -u "$DEV_USER" mkdir -p "$WORK_DIR"
     sudo cp .env.repository "$WORK_DIR/.env"
     sudo chown "$DEV_USER":"$DEV_USER" "$WORK_DIR/.env"
