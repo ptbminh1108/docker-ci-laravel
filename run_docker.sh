@@ -98,7 +98,7 @@ sudo -u "$DEV_USER" bash <<EOF
     fi
 
     echo "[LOG] Running migrations and seeds..."
-    if \$DOCKER_COMPOSE_CMD -f "$DOCKER_COMPOSE_FILE" exec -T app php artisan migrate --seed; then
+    if \$DOCKER_COMPOSE_CMD -f "$DOCKER_COMPOSE_FILE" exec -T app php artisan migrate --seed --force; then
         echo "[SUCCESS] Migrations and seeding completed."
     else
         echo "[ERROR] Failed to run migrations/seeds."
